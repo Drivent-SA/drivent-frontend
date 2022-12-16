@@ -1,19 +1,19 @@
 import { Typography } from '@material-ui/core';
-import { useState } from 'react';
 import ErrorMessageWrapper from '../../../components/ErrorMessageWrapper';
+import useTicket from '../../../hooks/api/useTicket';
 
 export default function Activities() {
-  const [ticketData, setTicketData] = useState();
+  const { ticket } = useTicket();
 
   function showError() {
-    if (ticketData?.status !== 'PAID') {
+    if (ticket?.status !== 'PAID') {
       return (
         <ErrorMessageWrapper>
           Você precisa ter confirmado pagamento antes de fazer a escolha de atividades
         </ErrorMessageWrapper>
       );
     }
-    if (ticketData?.ticketType?.isRemote) {
+    if (ticket?.TicketType?.isRemote === true) {
       return (
         <ErrorMessageWrapper>
           {`Sua modalidade de ingresso não necessita escolher
