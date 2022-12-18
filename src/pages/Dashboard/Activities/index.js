@@ -1,9 +1,12 @@
 import { Typography } from '@material-ui/core';
+import DateList from '../../../components/Activities/DateList';
 import ErrorMessageWrapper from '../../../components/ErrorMessageWrapper';
+import useActivities from '../../../hooks/api/useActivities';
 import useTicket from '../../../hooks/api/useTicket';
 
 export default function Activities() {
   const { ticket } = useTicket();
+  const { activities } = useActivities();
 
   function showError() {
     if (ticket?.status !== 'PAID') {
@@ -21,13 +24,14 @@ export default function Activities() {
         </ErrorMessageWrapper>
       );
     }
-    return <></>;
+    return false;
   }
 
   return (
     <>
       <Typography variant="h4">Escolha de atividades</Typography>
       {showError()}
+      {showError() === false ? <DateList activities={activities} /> : <></>}
     </>
   );
 }
