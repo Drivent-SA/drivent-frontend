@@ -3,6 +3,7 @@ import 'dayjs/locale/pt-br';
 import updateLocale from 'dayjs/plugin/updateLocale';
 import { useState } from 'react';
 import styled from 'styled-components';
+import ActivitiesTable from './ActivitiesTable';
 import DateSelector from './DateSelector';
 
 export default function DateList({ activities }) {
@@ -21,9 +22,19 @@ export default function DateList({ activities }) {
       }
     });
 
+  let dateActivities = [];
+  if (activities !== null) {
+    dateActivities = activities.filter((value) => {
+      if (dayjs(value.date).locale('pt-br').format('dddd, DD/MM') === showTable.date) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+  }
   return (
     <>
-      <Subtitle>Primeiro, filtre pelo dia do evento:</Subtitle>
+      {showTable.isShown ? <></> : <Subtitle>Primeiro, filtre pelo dia do evento:</Subtitle>}
       <ButtonContainer>
         {dates.map((date, index) => (
           <DateSelector
@@ -34,12 +45,13 @@ export default function DateList({ activities }) {
           />
         ))}
       </ButtonContainer>
+      {showTable.isShown && <ActivitiesTable dateActivities={dateActivities} />}
     </>
   );
 }
 
 const Subtitle = styled.h3`
-  margin-top: 34px;
+  margin-top: 9px;
   margin-bottom: 23px;
   font-family: 'Roboto', sans-serif;
   font-size: 20px;
