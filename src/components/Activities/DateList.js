@@ -1,10 +1,13 @@
 import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br';
 import updateLocale from 'dayjs/plugin/updateLocale';
+import { useState } from 'react';
 import styled from 'styled-components';
 import DateActivities from './DateActivities';
 
 export default function DateList({ activities }) {
+  const [showTable, setShowTable] = useState({ date: '', isShown: false });
+
   dayjs.extend(updateLocale);
   dayjs.updateLocale('pt-br', {
     weekdays: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
@@ -23,7 +26,12 @@ export default function DateList({ activities }) {
       <Subtitle>Primeiro, filtre pelo dia do evento:</Subtitle>
       <ButtonContainer>
         {dates.map((date, index) => (
-          <DateActivities key={index} date={dayjs(date).locale('pt-br').format('dddd, DD/MM')} />
+          <DateActivities
+            key={index}
+            date={dayjs(date).locale('pt-br').format('dddd, DD/MM')}
+            showTable={showTable}
+            setShowTable={setShowTable}
+          />
         ))}
       </ButtonContainer>
     </>

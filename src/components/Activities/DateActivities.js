@@ -1,15 +1,24 @@
-import { useState } from 'react';
 import styled from 'styled-components';
 
-export default function DateActivities({ date }) {
-  const [isClicked, setIsClicked] = useState(false);
+export default function DateActivities({ date, showTable, setShowTable }) {
+  function isClicked() {
+    if (showTable.date === date) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   return (
     <>
       <DateButton
-        isClicked={isClicked}
+        isClicked={isClicked()}
         onClick={() => {
-          setIsClicked(!isClicked);
+          if (showTable.date === date) {
+            setShowTable({ date: '', isShown: false });
+          } else {
+            setShowTable({ date, isShown: true });
+          }
         }}
       >
         {date}
