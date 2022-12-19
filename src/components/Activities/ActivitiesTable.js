@@ -1,3 +1,3 @@
-export default function ActivitiesTable() {
+export default function ActivitiesTable({ isShown, dateActivities }) {
   return <></>;
 }

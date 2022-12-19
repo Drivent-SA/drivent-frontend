@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export default function DateActivities({ date, showTable, setShowTable }) {
+export default function DateSelector({ date, showTable, setShowTable }) {
   function isClicked() {
     if (showTable.date === date) {
       return true;

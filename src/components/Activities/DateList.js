@@ -3,7 +3,7 @@ import 'dayjs/locale/pt-br';
 import updateLocale from 'dayjs/plugin/updateLocale';
 import { useState } from 'react';
 import styled from 'styled-components';
-import DateActivities from './DateActivities';
+import DateSelector from './DateSelector';
 
 export default function DateList({ activities }) {
   const [showTable, setShowTable] = useState({ date: '', isShown: false });
@@ -26,7 +26,7 @@ export default function DateList({ activities }) {
       <Subtitle>Primeiro, filtre pelo dia do evento:</Subtitle>
       <ButtonContainer>
         {dates.map((date, index) => (
-          <DateActivities
+          <DateSelector
             key={index}
             date={dayjs(date).locale('pt-br').format('dddd, DD/MM')}
             showTable={showTable}
