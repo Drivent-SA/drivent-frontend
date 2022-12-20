@@ -3,8 +3,6 @@ import useTicket from '../../hooks/api/useTicket';
 
 export default function PaymentsComponent() {
   const { ticket } = useTicket();
-
-  const teste = true;
   
   const hotel = ticket?.TicketType?.includesHotel ? ('Com Hotel'):('Sem Hotel');
   const remote = ticket?.TicketType?.isRemote ? ('Remoto'):('Presencial');
