@@ -3,10 +3,12 @@ import ErrorMessageWrapper from '../../../components/ErrorMessageWrapper';
 import HotelsList from '../../../components/Hotels/HotelsList';
 import useHotels from '../../../hooks/api/useHotels';
 import useTicket from '../../../hooks/api/useTicket';
+import useBooking from '../../../hooks/api/useBooking';
 
 export default function Hotel() {
   const { ticket } = useTicket();
   const { hotels } = useHotels();
+  const { booking } = useBooking();
 
   function showError() {
     if (ticket?.status !== 'PAID') {
@@ -31,7 +33,7 @@ export default function Hotel() {
     <>
       <Typography variant="h4">Escolha de hotel e quarto</Typography>
       {showError()}
-      {showError() === false ? <HotelsList hotels={hotels} /> : <></>}
+      {showError() === false ? ( booking ? <>EM ANDAMENTO (TASK DE RESUMO DE BOOKING)</> : <HotelsList hotels={hotels} /> ) : <></>}
     </>
   );
 }
