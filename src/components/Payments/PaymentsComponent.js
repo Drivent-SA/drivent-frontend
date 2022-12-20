@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import useTicket from '../../hooks/api/useTicket';
+import CardComponent from './CardComponent';
 
 export default function PaymentsComponent() {
   const { ticket } = useTicket();
@@ -12,17 +13,26 @@ export default function PaymentsComponent() {
   return (
 
     <>
+      <Title>Ingresso e pagamento</Title>
       <Subtitle>Ingresso escolhido</Subtitle>
       <ResumeContainer>
         <ResumeTitle>{hotel} + {remote}</ResumeTitle>
         <ResumeSubitle>R$ {price}</ResumeSubitle>
       </ResumeContainer>
+      <Subtitle>Pagamento</Subtitle>
+      <CardComponent/>
     </>
   );
 }
 
+const Title = styled.h2`
+  font-family: 'Roboto';
+  font-size: 34px;
+  line-height: 40px;
+  color: #000000;
+`;
 const Subtitle = styled.h3`
-  margin-top: 9px;
+  margin-top: 37px;
   margin-bottom: 23px;
   font-family: 'Roboto', sans-serif;
   font-size: 20px;
