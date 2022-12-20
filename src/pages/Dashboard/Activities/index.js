@@ -1,5 +1,6 @@
 import { Typography } from '@material-ui/core';
-import DateList from '../../../components/Activities/DateList';
+import styled from 'styled-components';
+import DateList from '../../../components/Activities';
 import ErrorMessageWrapper from '../../../components/ErrorMessageWrapper';
 import useActivities from '../../../hooks/api/useActivities';
 import useTicket from '../../../hooks/api/useTicket';
@@ -29,9 +30,13 @@ export default function Activities() {
 
   return (
     <>
-      <Typography variant="h4">Escolha de atividades</Typography>
+      <StyledTypography variant="h4">Escolha de atividades</StyledTypography>
       {showError()}
       {showError() === false ? <DateList activities={activities} /> : <></>}
     </>
   );
 }
+
+const StyledTypography = styled(Typography)`
+  margin-bottom: 27px !important;
+`;

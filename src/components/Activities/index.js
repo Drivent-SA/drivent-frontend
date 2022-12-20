@@ -1,10 +1,14 @@
 import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br';
 import updateLocale from 'dayjs/plugin/updateLocale';
+import { useState } from 'react';
 import styled from 'styled-components';
-import DateActivities from './DateActivities';
+import ActivitiesTable from './ActivitiesTable';
+import DateSelector from './DateSelector';
 
 export default function DateList({ activities }) {
+  const [showTable, setShowTable] = useState({ date: '', isShown: false });
+
   dayjs.extend(updateLocale);
   dayjs.updateLocale('pt-br', {
     weekdays: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
@@ -18,20 +22,36 @@ export default function DateList({ activities }) {
       }
     });
 
+  let dateActivities = [];
+  if (activities !== null) {
+    dateActivities = activities.filter((value) => {
+      if (dayjs(value.date).locale('pt-br').format('dddd, DD/MM') === showTable.date) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+  }
   return (
     <>
-      <Subtitle>Primeiro, filtre pelo dia do evento:</Subtitle>
+      {showTable.isShown ? <></> : <Subtitle>Primeiro, filtre pelo dia do evento:</Subtitle>}
       <ButtonContainer>
         {dates.map((date, index) => (
-          <DateActivities key={index} date={dayjs(date).locale('pt-br').format('dddd, DD/MM')} />
+          <DateSelector
+            key={index}
+            date={dayjs(date).locale('pt-br').format('dddd, DD/MM')}
+            showTable={showTable}
+            setShowTable={setShowTable}
+          />
         ))}
       </ButtonContainer>
+      {showTable.isShown && <ActivitiesTable dateActivities={dateActivities} />}
     </>
   );
 }
 
 const Subtitle = styled.h3`
-  margin-top: 34px;
+  margin-top: 9px;
   margin-bottom: 23px;
   font-family: 'Roboto', sans-serif;
   font-size: 20px;
