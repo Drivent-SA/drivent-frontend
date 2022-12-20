@@ -4,7 +4,7 @@ import useTicket from '../../../hooks/api/useTicket';
 
 export default function Payment() {
   const { ticket } = useTicket();
-  console.log(ticket);
+
   function showError() {
     if (ticket?.TicketType?.price !== undefined) {
       return (<PaymentsComponent/>);
