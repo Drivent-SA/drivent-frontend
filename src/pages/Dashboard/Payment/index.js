@@ -4,9 +4,9 @@ import useTicket from '../../../hooks/api/useTicket';
 
 export default function Payment() {
   const { ticket } = useTicket();
-
+  console.log(ticket);
   function showError() {
-    if (ticket?.ticketType?.price !== undefined) {
+    if (ticket?.TicketType?.price !== undefined) {
       return (<PaymentsComponent/>);
     } else {
       return <ErrorMessageWrapper>Você precisa completar sua inscrição antes de prosseguir pra escolha de ingresso</ErrorMessageWrapper>;
