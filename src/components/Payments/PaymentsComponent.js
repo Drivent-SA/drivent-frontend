@@ -6,7 +6,7 @@ export default function PaymentsComponent() {
   
   const hotel = ticket?.TicketType?.includesHotel ? ('Com Hotel'):('Sem Hotel');
   const remote = ticket?.TicketType?.isRemote ? ('Remoto'):('Presencial');
-  const price = Number(ticket?.TicketType?.price)/100;
+  const price = Number(ticket?.TicketType?.price);
   return (
 
     <>
