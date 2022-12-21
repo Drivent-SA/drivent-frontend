@@ -20,11 +20,32 @@ export default function HotelComponent({ name, image, id, setHotel }) {
 
   let totalVacancies = 0;
   let bookings = 0;
+  let isSingle = false;
+  let isDouble = false;
+  let isTriple = false;
+
   if (roomsData) {
     roomsData.map(room => {
       totalVacancies += room.capacity;
       bookings += room.Booking.length;
+      if (room.capacity === 1) return isSingle = true;
+      if (room.capacity === 2) return isDouble = true;
+      if (room.capacity >= 3) return isTriple = true;
     });
+  }
+
+  let accommodations = [];
+  if (isSingle) accommodations.push('Single');
+  if (isDouble) accommodations.push('Double');
+  if (isTriple) accommodations.push('Triple');
+
+  let accommodationsDescription = '';
+  if (accommodations.length === 1) {
+    accommodationsDescription = accommodations[0];
+  } else if (accommodations.length === 2) {
+    accommodationsDescription = `${accommodations[0]} e ${accommodations[1]}`;
+  } else {
+    accommodationsDescription = `${accommodations[0]}, ${accommodations[1]} e ${accommodations[2]}`;
   }
 
   const availableVacancies = totalVacancies - bookings;
@@ -35,7 +56,7 @@ export default function HotelComponent({ name, image, id, setHotel }) {
         <HotelImage src={image} alt="Imagem do hotel" />
         <HotelName>{name}</HotelName>
         <Subtitle type="accommodations">Tipos de acomodação:</Subtitle>
-        <HotelData>Single, Double e Triple</HotelData>
+        <HotelData>{accommodationsDescription}</HotelData>
         <Subtitle type="vacancies">Vagas disponíveis:</Subtitle>
         <HotelData>{availableVacancies}</HotelData>
       </HotelBox>
