@@ -20,21 +20,21 @@ export default function Hotel() {
   });
 
   function showError() {
-    if (ticket?.status !== 'PAID') {
-      return (
-        <ErrorMessageWrapper>
-          Você precisa ter confirmado pagamento antes de fazer a escolha de hospedagem
-        </ErrorMessageWrapper>
-      );
-    }
-    if (ticket?.TicketType?.isRemote || !ticket?.TicketType?.includesHotel) {
-      return (
-        <ErrorMessageWrapper>
-          {`Sua modalidade de ingresso não inclui hospedagem
-          Prossiga para a escolha de atividades`}
-        </ErrorMessageWrapper>
-      );
-    }
+    // if (ticket?.status !== 'PAID') {
+    //   return (
+    //     <ErrorMessageWrapper>
+    //       Você precisa ter confirmado pagamento antes de fazer a escolha de hospedagem
+    //     </ErrorMessageWrapper>
+    //   );
+    // }
+    // if (ticket?.TicketType?.isRemote || !ticket?.TicketType?.includesHotel) {
+    //   return (
+    //     <ErrorMessageWrapper>
+    //       {`Sua modalidade de ingresso não inclui hospedagem
+    //       Prossiga para a escolha de atividades`}
+    //     </ErrorMessageWrapper>
+    //   );
+    // }
     return false;
   }
 
