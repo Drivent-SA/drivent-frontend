@@ -5,11 +5,19 @@ import useHotels from '../../../hooks/api/useHotels';
 import useTicket from '../../../hooks/api/useTicket';
 import useBooking from '../../../hooks/api/useBooking';
 import BookingSummary from '../../../components/Hotels/BookingSummary';
+import { useEffect, useState } from 'react';
 
 export default function Hotel() {
   const { ticket } = useTicket();
   const { hotels } = useHotels();
-  const { booking } = useBooking();
+  const { getBooking } = useBooking();
+  const [refresh, setRefresh] = useState(false);
+  const [bookingData, setBookingData] = useState(null);
+  const [tradeBooking, setTradeBooking] = useState({
+    id: undefined,
+    isTrading: false,
+    loading: false,
+  });
 
   function showError() {
     if (ticket?.status !== 'PAID') {
@@ -30,11 +38,42 @@ export default function Hotel() {
     return false;
   }
 
+  useEffect(() => {
+    const fetchData = async() => {
+      setBookingData(await getBooking());
+    };
+    fetchData();
+  }, [refresh]);
+
   return (
     <>
       <Typography variant="h4">Escolha de hotel e quarto</Typography>
       {showError()}
-      {showError() === false ? ( booking ? <><BookingSummary booking={booking} /></> : <HotelsList hotels={hotels} /> ) : <></>}
+      {showError() === false ? (
+        bookingData !== null ? (
+          !tradeBooking.isTrading ? (
+            <BookingSummary booking={bookingData} setTrade={setTradeBooking} />
+          ) : (
+            <HotelsList
+              hotels={hotels}
+              trade={tradeBooking}
+              setTrade={setTradeBooking}
+              refresh={refresh}
+              setRefresh={setRefresh}
+            />
+          )
+        ) : (
+          <HotelsList
+            hotels={hotels}
+            trade={tradeBooking}
+            setTrade={setTradeBooking}
+            refresh={refresh}
+            setRefresh={setRefresh}
+          />
+        )
+      ) : (
+        <></>
+      )}
     </>
   );
 }
