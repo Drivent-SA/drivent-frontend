@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export default function BookingSummary({ booking }) {
+export default function BookingSummary({ booking, setTrade }) {
   const capacityName = () => {
     if (booking.Room.capacity === 1)
       return {
@@ -18,7 +18,7 @@ export default function BookingSummary({ booking }) {
         people: 'Você e mais 2',
       };
   };
-  
+
   return (
     <SummaryBox>
       <SummaryMessage>Você já escolheu o seu quarto:</SummaryMessage>
@@ -32,7 +32,16 @@ export default function BookingSummary({ booking }) {
         <h5>Pessoas no seu quarto</h5>
         <Paragraph>{capacityName().people}</Paragraph>
       </Infos>
-      <ChangeRoomButton>TROCAR DE QUARTO</ChangeRoomButton>
+      <ChangeRoomButton
+        onClick={() => {
+          setTrade({
+            id: booking.id,
+            isTrading: true,
+          });
+        }}
+      >
+        TROCAR DE QUARTO
+      </ChangeRoomButton>
     </SummaryBox>
   );
 }

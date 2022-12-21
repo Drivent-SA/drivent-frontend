@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import useSaveBooking from '../../hooks/api/useSaveBooking';
+import useUpdateBooking from '../../hooks/api/useUpdateBooking';
 import RoomsList from '../Rooms/RoomsList';
 import HotelComponent from './HotelComponent';
 
-export default function HotelsList({ hotels }) {
+export default function HotelsList({ hotels, trade, setTrade, refresh, setRefresh }) {
   const [hotelClicked, setHotelClicked] = useState({
     id: undefined,
     data: undefined,
@@ -14,6 +15,7 @@ export default function HotelsList({ hotels }) {
     isClicked: false,
   });
   const { saveBooking } = useSaveBooking(selectedRoom.id);
+  const { updateBooking } = useUpdateBooking(trade.id, selectedRoom.id);
 
   const organizeCapacityArray = (room) => {
     const capacityArray = [];
@@ -35,7 +37,18 @@ export default function HotelsList({ hotels }) {
   };
 
   const sendSaveBooking = async() => {
-    await saveBooking();
+    if (trade.isTrading) {
+      await updateBooking();
+      setTrade({
+        id: undefined,
+        isTrading: false,
+        loading: true,
+      });
+      setRefresh(!refresh);
+    } else {
+      await saveBooking();
+      setRefresh(!refresh);
+    }
   };
 
   return (
@@ -79,7 +92,9 @@ export default function HotelsList({ hotels }) {
       </RoomsContainer>
       {selectedRoom.isClicked ? (
         <>
-          <RoomsButton onClick={sendSaveBooking}>RESERVAR QUARTO</RoomsButton>
+          <RoomsButton onClick={sendSaveBooking}>
+            {trade.isTrading ? 'TROCAR DE QUARTO' : 'RESERVAR QUARTO'}
+          </RoomsButton>
         </>
       ) : (
         <></>
