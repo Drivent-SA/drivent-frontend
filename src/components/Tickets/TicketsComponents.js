@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 import { toast } from 'react-toastify';
@@ -11,56 +11,57 @@ export default function TicketsComponent({ setTicketReserved }) {
   const { enrollment } = useEnrollment();
   const { ticketsType } = useTicketType();
   const { createTicket } = useCreateTicket();
-  const [ dataTicketType, setDataTicketType ] = useState(null);
-  const [ ticketTypePresentialWithHotel, setTicketTypePresentialWithHotel ] = useState({});
-  const [ ticketTypePresentialNoHotel, setTicketTypePresentialNoHotel ] = useState({});
-  const [ ticketTypeOnline, setTicketTypeOnline ] = useState({});
-  const [ presential, setPresential ] = useState(false);       
-  const [ online, setOnline ] = useState(false);
-  const [ withHotel, setWithHotel ] = useState(false);       
-  const [ noHotel, setNoHotel ] = useState(false);
-  const [ infoTicketTypeId, setInfoTicketTypeId ] = useState({ ticketTypeId: '' });
+  const [ ticketsInfoStatus, setTicketsInfoStatus ] = useState({ 
+    isRemote: '', 
+    presential: '', 
+    includesHotel: '',
+    idRemote: '',
+    priceRemote: '',
+    idPresentialWithHotel: '',
+    pricePresentialWithHotel: '',
+    idPresentialNoHotel: '',
+    pricePresentialNoHotel: '' 
+  });
 
   useEffect(() => {
-    setDataTicketType(ticketsType);
+    if(ticketsType) {
+      let idRemote, 
+        priceRemote, 
+        idPresentialWithHotel, 
+        pricePresentialWithHotel, 
+        idPresentialNoHotel, 
+        pricePresentialNoHotel;
+
+      for(let i = 0; i < ticketsType.length; i++) {
+        const ticketType = ticketsType[i];
+
+        if(ticketType.isRemote) {
+          idRemote = ticketType.id;
+          priceRemote = ticketType.price;
+        } else if (!ticketType.isRemote && ticketType.includesHotel) {
+          idPresentialWithHotel = ticketType.id;
+          pricePresentialWithHotel = ticketType.price;
+        } else if (!ticketType.isRemote && !ticketType.includesHotel) {
+          idPresentialNoHotel = ticketType.id;
+          pricePresentialNoHotel = ticketType.price;
+        }
+      }
+
+      setTicketsInfoStatus({
+        ...ticketsInfoStatus,
+        idRemote,
+        priceRemote,
+        idPresentialWithHotel,
+        pricePresentialWithHotel,
+        idPresentialNoHotel,
+        pricePresentialNoHotel
+      });
+    }
   }, [ticketsType]);
 
-  useEffect(() => {
-    if(dataTicketType) {
-      for(let i = 0; i < dataTicketType.length; i++)  {
-        if(dataTicketType[i].name === 'Presencial Com Hotel') setTicketTypePresentialWithHotel(dataTicketType[i]);
-        else if(dataTicketType[i].name === 'Presencial Sem Hotel') setTicketTypePresentialNoHotel(dataTicketType[i]);
-        else setTicketTypeOnline(dataTicketType[i]);
-      }
-    }
-  }, [dataTicketType]);
-
-  function handleType(type) {
-    if(type === 'Presential') {
-      setPresential(true);
-      setOnline(false);
-    } else {
-      setOnline(true);
-      setPresential(false);
-      setInfoTicketTypeId({ ticketTypeId: ticketTypeOnline.id });
-    }
-  }
-
-  function handleHotel(type) {
-    if(type === 'Com Hotel') {
-      setWithHotel(true);
-      setNoHotel(false);
-      setInfoTicketTypeId({ ticketTypeId: ticketTypePresentialWithHotel.id });
-    } else {
-      setNoHotel(true);
-      setWithHotel(false);
-      setInfoTicketTypeId({ ticketTypeId: ticketTypePresentialNoHotel.id });
-    }
-  }
-
-  async function handleTicket() {
+  async function handleTicket(id) {
     try {
-      await createTicket(infoTicketTypeId);
+      await createTicket({ ticketTypeId: id });
       toast.success('Ingresso reservado com sucesso!');
       setTicketReserved(true);
     } catch (err) {
@@ -78,79 +79,78 @@ export default function TicketsComponent({ setTicketReserved }) {
 
             <TicketsOptions>
               <div 
-                className={presential && !online ? 'backBorderColor' : ''} 
-                onClick={() => handleType('Presential')}
+                className={ticketsInfoStatus.isRemote === false && ticketsInfoStatus.presential === true ? 'backBorderColor' : ''} 
+                onClick={() => setTicketsInfoStatus({ ...ticketsInfoStatus, isRemote: false, presential: true })}
               >
                 <p className="name">Presencial</p>
                 <p className="price">R$ {
-                  ticketTypePresentialWithHotel && ticketTypePresentialNoHotel &&
-                    ticketTypePresentialWithHotel.price < ticketTypePresentialNoHotel.price ?
-                    ticketTypePresentialWithHotel.price : 
-                    ticketTypePresentialNoHotel.price
+                  ticketsInfoStatus.pricePresentialWithHotel < ticketsInfoStatus.pricePresentialNoHotel ?
+                    ticketsInfoStatus.pricePresentialNoHotel :
+                    ticketsInfoStatus.pricePresentialNoHotel
                 }</p>
               </div>
 
               <div 
-                className={online && !presential ? 'backBorderColor' : ''} 
-                onClick={() => handleType('Remote')}
+                className={ticketsInfoStatus.isRemote === true && ticketsInfoStatus.presential === false ? 'backBorderColor' : ''} 
+                onClick={() => setTicketsInfoStatus({ ...ticketsInfoStatus, isRemote: true, presential: false, includesHotel: '' })}
               >
                 <p className="name">Online</p>
-                <p className="price">R$ {ticketTypeOnline && ticketTypeOnline.price}</p>
+                <p className="price">R$ {ticketsInfoStatus.priceRemote}</p>
               </div>
             </TicketsOptions>
             
             {
-              presential && !online &&
+              ticketsInfoStatus.isRemote === false && ticketsInfoStatus.presential === true &&
                 <>
                   <Message>Ótimo! Agora escolha sua modalidade de hospedagem</Message>
 
                   <TicketsOptions>
                     <div 
-                      className={noHotel && !withHotel ? 'backBorderColor' : ''} 
-                      onClick={() => handleHotel('Sem Hotel')}
+                      className={ticketsInfoStatus.presential === true && ticketsInfoStatus.includesHotel === false ? 'backBorderColor' : ''} 
+                      onClick={() => setTicketsInfoStatus({ ...ticketsInfoStatus, includesHotel: false })}
                     >
                       <p className="name">Sem Hotel</p>
                       <p className="price">+ R$ {
-                        ticketTypePresentialNoHotel.price < ticketTypePresentialWithHotel.price ?
-                          0 : 
-                          ticketTypePresentialNoHotel.price - ticketTypePresentialWithHotel.price
+                        ticketsInfoStatus.pricePresentialNoHotel > ticketsInfoStatus.pricePresentialWithHotel ?
+                          ticketsInfoStatus.pricePresentialNoHotel - ticketsInfoStatus.pricePresentialWithHotel :
+                          0
                       }</p>
                     </div>
 
                     <div 
-                      className={withHotel && !noHotel ? 'backBorderColor' : ''} 
-                      onClick={() => handleHotel('Com Hotel')}
+                      className={ticketsInfoStatus.presential === true && ticketsInfoStatus.includesHotel === true ? 'backBorderColor' : ''} 
+                      onClick={() => setTicketsInfoStatus({ ...ticketsInfoStatus, includesHotel: true })}
                     >
                       <p className="name">Com Hotel</p>
                       <p className="price">+ R$ {
-                        ticketTypePresentialWithHotel.price < ticketTypePresentialNoHotel.price ?
-                          0 : 
-                          ticketTypePresentialWithHotel.price - ticketTypePresentialNoHotel.price
+                        ticketsInfoStatus.pricePresentialWithHotel > ticketsInfoStatus.pricePresentialNoHotel ?
+                          ticketsInfoStatus.pricePresentialWithHotel - ticketsInfoStatus.pricePresentialNoHotel :
+                          0
                       }</p>
                     </div>
                   </TicketsOptions>
 
                   {
-                    withHotel && !noHotel &&
+                    ticketsInfoStatus.presential === true && ticketsInfoStatus.includesHotel === true &&
                       <>
-                        <Message>Fechado! O total ficou em R$ {ticketTypePresentialWithHotel.price}. Agora é só confirmar:</Message>
-                        <Button onClick={() => handleTicket('With Hotel')}>reservar ingresso</Button>
+                        <Message>Fechado! O total ficou em R$ {ticketsInfoStatus.pricePresentialWithHotel}. Agora é só confirmar:</Message>
+                        <Button onClick={() => handleTicket(ticketsInfoStatus.idPresentialWithHotel)}>reservar ingresso</Button>
                       </>
                   }
                   {
-                    noHotel && !withHotel &&
+                    ticketsInfoStatus.presential === true && ticketsInfoStatus.includesHotel === false &&
                     <>
-                      <Message>Fechado! O total ficou em R$ {ticketTypePresentialNoHotel.price}. Agora é só confirmar:</Message>
-                      <Button onClick={() => handleTicket('No Hotel')}>reservar ingresso</Button>
+                      <Message>Fechado! O total ficou em R$ {ticketsInfoStatus.pricePresentialNoHotel}. Agora é só confirmar:</Message>
+                      <Button onClick={() => handleTicket(ticketsInfoStatus.idPresentialNoHotel)}>reservar ingresso</Button>
                     </>
                   }
                 </>
             }
             {
-              online && !presential &&
+              ticketsInfoStatus.isRemote === true && ticketsInfoStatus.presential === false &&
                 <>
-                  <Message>Fechado! O total ficou em R$ {ticketTypeOnline.price}. Agora é só confirmar:</Message>
-                  <Button onClick={() => handleTicket('Remote')}>reservar ingresso</Button>
+                  <Message>Fechado! O total ficou em R$ {ticketsInfoStatus.priceRemote}. Agora é só confirmar:</Message>
+                  <Button onClick={() => handleTicket(ticketsInfoStatus.idRemote)}>reservar ingresso</Button>
                 </>
             }
           </> :
