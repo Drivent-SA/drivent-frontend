@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import styled from 'styled-components';
+import UserContext from '../../contexts/UserContext';
 import useSaveBooking from '../../hooks/api/useSaveBooking';
 import useUpdateBooking from '../../hooks/api/useUpdateBooking';
 import RoomsList from '../Rooms/RoomsList';
@@ -16,10 +17,19 @@ export default function HotelsList({ hotels, trade, setTrade, refresh, setRefres
   });
   const { saveBooking } = useSaveBooking(selectedRoom.id);
   const { updateBooking } = useUpdateBooking(trade.id, selectedRoom.id);
+  const { userData } = useContext(UserContext);
 
   const organizeCapacityArray = (room) => {
     const capacityArray = [];
-
+    if(room.Booking.length !== 0) {
+      const filteredBooking = room.Booking.filter( book => book.userId === userData.user.id);
+      if (filteredBooking.length !== 0) {
+        for (let i = 0; i < room.capacity; i++) {
+          capacityArray.push('full');
+        }
+        return capacityArray;
+      }
+    }
     if (room.capacity !== room.Booking.length) {
       for (let i = 0; i < room.capacity; i++) {
         capacityArray.push('outline');
@@ -29,7 +39,6 @@ export default function HotelsList({ hotels, trade, setTrade, refresh, setRefres
       }
       return capacityArray;
     }
-
     for (let i = 0; i < room.capacity; i++) {
       capacityArray.push('full');
     }
@@ -64,6 +73,7 @@ export default function HotelsList({ hotels, trade, setTrade, refresh, setRefres
               image={hotel.image}
               key={index}
               id={hotel.id}
+              hotel={hotelClicked}
               setHotel={setHotelClicked}
             />
           ))

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import useRooms from '../../hooks/api/useRooms';
 
-export default function HotelComponent({ name, image, id, setHotel }) {
+export default function HotelComponent({ name, image, id, hotel, setHotel }) {
   const { getRooms } = useRooms(id);
   const [roomsData, setRoomsData] = useState();
 
@@ -16,6 +16,11 @@ export default function HotelComponent({ name, image, id, setHotel }) {
       id,
       data: await getRooms(),
     });
+  };
+
+  const selectHotel = () => {
+    if (hotel.data?.id === id) return true;
+    return false;
   };
 
   let totalVacancies = 0;
@@ -52,7 +57,7 @@ export default function HotelComponent({ name, image, id, setHotel }) {
 
   return (
     <>
-      <HotelBox onClick={clickHotel}>
+      <HotelBox selectHotel={selectHotel()} onClick={clickHotel}>
         <HotelImage src={image} alt="Imagem do hotel" />
         <HotelName>{name}</HotelName>
         <Subtitle type="accommodations">Tipos de acomodação:</Subtitle>
@@ -69,7 +74,7 @@ const HotelBox = styled.div`
   height: 264px;
   border-radius: 10px;
   padding: 16px 14px;
-  background-color: #ebebeb;
+  background-color: ${ ({ selectHotel }) => ( selectHotel ? '#ffeed2' : '#ebebeb')};
   font-family: 'Roboto';
 
   cursor: pointer;
