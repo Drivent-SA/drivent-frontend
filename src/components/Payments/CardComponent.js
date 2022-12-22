@@ -35,8 +35,7 @@ function CardComponent({ ticketId }) {
         await savePayment({ ticketId, cardData });
       }
     } catch (error) {
-    //TODO avisar erro
-      console.log(error);
+
     }
   }
 
