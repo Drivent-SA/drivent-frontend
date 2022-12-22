@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { BsPerson, BsPersonFill } from 'react-icons/bs';
 
-export default function RoomsList({ id, name, capacity, selectedRoom, setSelectedRoom }) {
+export default function RoomsList({ id, name, capacity, bookingArray, selectedRoom, setSelectedRoom }) {
   const isFull = capacity.includes('full');
   const selectRoom = (id) => {
     setSelectedRoom({
@@ -11,7 +11,18 @@ export default function RoomsList({ id, name, capacity, selectedRoom, setSelecte
   };
 
   const clicked = () => {
-    if (selectedRoom.id === id) return true;
+    if (selectedRoom.id === id) {
+      if(capacity.length - bookingArray.length === 1) {
+        capacity[0] = 'filled';
+        return true;
+      }
+      for (let i = capacity.length; i >= 0; i--) {
+        if (capacity[i] === 'outline' || capacity[i+1] === 'filled') {
+          capacity[i] = 'filled';
+          return true;
+        }
+      }
+    };
     return false;
   };
 
