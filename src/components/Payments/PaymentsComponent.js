@@ -9,8 +9,9 @@ export default function PaymentsComponent() {
   
   const hotel = ticket?.TicketType?.includesHotel ? ('Com Hotel'):('Sem Hotel');
   const remote = ticket?.TicketType?.isRemote ? ('Remoto'):('Presencial');
+  const [isPaid, setIsPaid] = useState(false);
   const price = Number(ticket?.TicketType?.price);
-
+  
   return (
 
     <>
@@ -21,7 +22,7 @@ export default function PaymentsComponent() {
         <ResumeSubitle>R$ {price}</ResumeSubitle>
       </ResumeContainer>
       <Subtitle>Pagamento</Subtitle>
-      {ticket?.status === 'PAID' ? (<PaymentsSucccess/>):(<CardComponent ticketId={ticket?.id}/>)}
+      {ticket?.status === 'PAID' ||  isPaid ? (<PaymentsSucccess/>):(<CardComponent ticketId={ticket?.id} setIsPaid={setIsPaid} isPaid={isPaid}/>)}
       
     </>
   );
