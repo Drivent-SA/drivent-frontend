@@ -1,5 +1,8 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import useTicket from '../../hooks/api/useTicket';
+import CardComponent from './CardComponent';
+import PaymentsSucccess from './PaymentSuccess';
 
 export default function PaymentsComponent() {
   const { ticket } = useTicket();
@@ -7,20 +10,31 @@ export default function PaymentsComponent() {
   const hotel = ticket?.TicketType?.includesHotel ? ('Com Hotel'):('Sem Hotel');
   const remote = ticket?.TicketType?.isRemote ? ('Remoto'):('Presencial');
   const price = Number(ticket?.TicketType?.price);
+
   return (
 
     <>
+      <Title>Ingresso e pagamento</Title>
       <Subtitle>Ingresso escolhido</Subtitle>
       <ResumeContainer>
         <ResumeTitle>{hotel} + {remote}</ResumeTitle>
         <ResumeSubitle>R$ {price}</ResumeSubitle>
       </ResumeContainer>
+      <Subtitle>Pagamento</Subtitle>
+      {ticket?.status === 'PAID' ? (<PaymentsSucccess/>):(<CardComponent ticketId={ticket?.id}/>)}
+      
     </>
   );
 }
 
+const Title = styled.h2`
+  font-family: 'Roboto';
+  font-size: 34px;
+  line-height: 40px;
+  color: #000000;
+`;
 const Subtitle = styled.h3`
-  margin-top: 9px;
+  margin-top: 37px;
   margin-bottom: 23px;
   font-family: 'Roboto', sans-serif;
   font-size: 20px;
