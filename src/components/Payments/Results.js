@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Cards from 'react-credit-cards-2';
 import styled from 'styled-components';
 import 'react-credit-cards-2/es/styles-compiled.css';

@@ -1,11 +1,10 @@
 import styled from 'styled-components';
 import useTicket from '../../hooks/api/useTicket';
 import CardComponent from './CardComponent';
+import PaymentsSucccess from './PaymentSuccess';
 
 export default function PaymentsComponent() {
   const { ticket } = useTicket();
-
-  const teste = true;
   
   const hotel = ticket?.TicketType?.includesHotel ? ('Com Hotel'):('Sem Hotel');
   const remote = ticket?.TicketType?.isRemote ? ('Remoto'):('Presencial');
@@ -20,7 +19,8 @@ export default function PaymentsComponent() {
         <ResumeSubitle>R$ {price}</ResumeSubitle>
       </ResumeContainer>
       <Subtitle>Pagamento</Subtitle>
-      <CardComponent/>
+      {ticket?.status === 'PAID' ? (<PaymentsSucccess/>):(<CardComponent ticketId={ticket?.id}/>)}
+      
     </>
   );
 }
