@@ -10,6 +10,16 @@ export default function ActivitiesTable({ dateActivities }) {
     return { ...value, duration: timeDifference, availableSeats };
   });
 
+  function compareByStartTime(a, b) {
+    if (a.startTime < b.startTime) {
+      return -1;
+    }
+    else {
+      return 1;
+    }
+  }
+  activities.sort(compareByStartTime);
+
   const mainActivities = activities.filter((value) => value.place === 'AUDITORIO_PRINCIPAL');
   const sideActivities = activities.filter((value) => value.place === 'AUDITORIO_LATERAL');
   const workshopActivities = activities.filter((value) => value.place === 'SALA_DE_WORKSHOP');

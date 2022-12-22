@@ -1,6 +1,9 @@
-import ErrorMessageWrapper from '../../../components/ErrorMessageWrapper';
 import PaymentsComponent from '../../../components/Payments/PaymentsComponent';
+import TicketsComponent from '../../../components/Tickets/TicketsComponents';
+
+import { useState } from 'react';
 import useTicket from '../../../hooks/api/useTicket';
+import ErrorMessageWrapper from '../../../components/ErrorMessageWrapper';
 
 export default function Payment() {
   const { ticket } = useTicket();
@@ -8,9 +11,11 @@ export default function Payment() {
     if (ticket?.TicketType?.price !== undefined) {
       return (<PaymentsComponent/>);
     } else {
-      return <ErrorMessageWrapper>Você precisa completar sua inscrição antes de prosseguir pra escolha de ingresso</ErrorMessageWrapper>;
+      return <TicketsComponent setTicketReserved={setTicketReserved} />;
     }
   }
+  const [ ticketReserved, setTicketReserved ] = useState(false);
+
   return (
     <>
       {showError()}
