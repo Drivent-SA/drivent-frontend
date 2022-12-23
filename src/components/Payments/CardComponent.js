@@ -41,8 +41,6 @@ function CardComponent({ ticketId, isPaid, setIsPaid }) {
         toast.success('Ingresso pago com sucesso!');
 
         setIsPaid(true);
-      } else {
-        console.log('foi n');
       }
     } catch (error) {
       toast.error('Não foi possível efetuar o pagamento do ingresso!');
