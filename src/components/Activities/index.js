@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br';
 import updateLocale from 'dayjs/plugin/updateLocale';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import ActivitiesTable from './ActivitiesTable';
 import DateSelector from './DateSelector';

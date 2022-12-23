@@ -8,24 +8,34 @@ import useTicket from '../../../hooks/api/useTicket';
 
 export default function Activities() {
   const { ticket } = useTicket();
-  const { activities } = useActivities();
+  const { getActivities } = useActivities();
+  const [activities, setActivities] = useState(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      const data = await getActivities();
+      setActivities(data);
+    };
+
+    fetchData();
+  }, []);
 
   function showError() {
-    // if (ticket?.status !== 'PAID') {
-    //   return (
-    //     <ErrorMessageWrapper>
-    //       Você precisa ter confirmado pagamento antes de fazer a escolha de atividades
-    //     </ErrorMessageWrapper>
-    //   );
-    // }
-    // if (ticket?.TicketType?.isRemote === true) {
-    //   return (
-    //     <ErrorMessageWrapper>
-    //       {`Sua modalidade de ingresso não necessita escolher
-    //       atividade. Você terá acesso a todas as atividades.`}
-    //     </ErrorMessageWrapper>
-    //   );
-    // }
+    if (ticket?.status !== 'PAID') {
+      return (
+        <ErrorMessageWrapper>
+          Você precisa ter confirmado pagamento antes de fazer a escolha de atividades
+        </ErrorMessageWrapper>
+      );
+    }
+    if (ticket?.TicketType?.isRemote === true) {
+      return (
+        <ErrorMessageWrapper>
+          {`Sua modalidade de ingresso não necessita escolher
+          atividade. Você terá acesso a todas as atividades.`}
+        </ErrorMessageWrapper>
+      );
+    }
     return false;
   }
 

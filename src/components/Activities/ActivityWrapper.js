@@ -3,11 +3,9 @@ import styled from 'styled-components';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import { BiLogIn } from 'react-icons/bi';
 import useEnrollInActivity from '../../hooks/api/useEnrollInActivity';
-import useActivities from '../../hooks/api/useActivities';
 
 export default function ActivityWrapper({ id, title, startTime, endTime, duration, availableSeats }) {
   const { postEnrollInActivity } = useEnrollInActivity(id);
-  const { activities } = useActivities();
 
   async function enrollInActivity() {
     await postEnrollInActivity();
