@@ -1,22 +1,19 @@
 import styled from 'styled-components';
 
 export default function BookingSummary({ booking, setTrade }) {
+  const capacityNumber = () => {
+    if (booking.Room.capacity === 1) return 'Single';
+
+    if (booking.Room.capacity === 2) return 'Double';
+
+    if (booking.Room.capacity >= 3) return 'Triple';
+  };
   const capacityName = () => {
-    if (booking.Room.Booking.length === 1)
-      return {
-        number: 'Single',
-        people: 'Somente você',
-      };
-    if (booking.Room.Booking.length === 2)
-      return {
-        number: 'Double',
-        people: 'Você e mais 1',
-      };
-    if (booking.Room.Booking.length >= 3)
-      return {
-        number: 'Triple',
-        people: 'Você e mais 2',
-      };
+    if (booking.Room.Booking.length === 1) return 'Somente você';
+
+    if (booking.Room.Booking.length === 2) return 'Você e mais 1';
+
+    if (booking.Room.Booking.length >= 3) return 'Você e mais 2';
   };
 
   return (
@@ -27,10 +24,10 @@ export default function BookingSummary({ booking, setTrade }) {
         <HotelName>{booking.Room.Hotel.name}</HotelName>
         <h5>Quarto reservado</h5>
         <Paragraph>
-          {booking.Room.name} ({capacityName().number})
+          {booking.Room.name} ({capacityNumber()})
         </Paragraph>
         <h5>Pessoas no seu quarto</h5>
-        <Paragraph>{capacityName().people}</Paragraph>
+        <Paragraph>{capacityName()}</Paragraph>
       </Infos>
       <ChangeRoomButton
         onClick={() => {
