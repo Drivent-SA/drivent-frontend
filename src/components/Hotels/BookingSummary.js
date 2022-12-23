@@ -2,17 +2,17 @@ import styled from 'styled-components';
 
 export default function BookingSummary({ booking, setTrade }) {
   const capacityName = () => {
-    if (booking.Room.capacity === 1)
+    if (booking.Room.Booking.length === 1)
       return {
         number: 'Single',
         people: 'Somente você',
       };
-    if (booking.Room.capacity === 2)
+    if (booking.Room.Booking.length === 2)
       return {
         number: 'Double',
         people: 'Você e mais 1',
       };
-    if (booking.Room.capacity >= 3)
+    if (booking.Room.Booking.length >= 3)
       return {
         number: 'Triple',
         people: 'Você e mais 2',

@@ -3,12 +3,11 @@ import styled from 'styled-components';
 import { AiOutlineCloseCircle, AiOutlineCheckCircle } from 'react-icons/ai';
 import { BiLogIn } from 'react-icons/bi';
 import useEnrollInActivity from '../../hooks/api/useEnrollInActivity';
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import UserContext from '../../contexts/UserContext';
 
 export default function ActivityWrapper({ id, title, startTime, endTime, duration, availableSeats, activityBooking, refresh, setRefresh }) {
   const { postEnrollInActivity } = useEnrollInActivity(id);
-  const [isSubscribed, setIsSubscribed] = useState(false);
   const { userData } = useContext(UserContext);
 
   async function enrollInActivity() {
@@ -16,10 +15,13 @@ export default function ActivityWrapper({ id, title, startTime, endTime, duratio
     setRefresh(!refresh);
   }
 
-  useEffect(() => {
-    const userBooking = activityBooking.filter(value => value.userId === userData.user.id);
-    if (userBooking.length > 0) return setIsSubscribed(true);
-  });
+  let isSubscribed = false;
+  if (activityBooking !== undefined) {
+    const userBooking = activityBooking.some(value => value.userId === userData.user.id);
+    if (userBooking) {
+      isSubscribed = true;
+    }
+  }
 
   return (
     <Wrapper duration={duration} isSubscribed={isSubscribed}>
