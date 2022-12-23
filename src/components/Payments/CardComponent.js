@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { toast } from 'react-toastify';
 import useSavePayment from '../../hooks/api/useSavePayment';
 
 import Results from './Results';
 
-function CardComponent({ ticketId }) {
+function CardComponent({ ticketId, isPaid, setIsPaid }) {
   const [forms, setForms] = useState({
     cardNumber: '',
     name: '',
     expiry: '',
     cvc: ''
   });
+
   const [isFrontOfCardVisible, setIsFrontOfCardVisible] = useState(true);
 
   function toggleCardFlip() {
@@ -33,10 +35,13 @@ function CardComponent({ ticketId }) {
         };
 
         await savePayment({ ticketId, cardData });
+
+        toast.success('Ingresso pago com sucesso!');
+
+        setIsPaid(true);
       }
     } catch (error) {
-    //TODO avisar erro
-      console.log(error);
+      toast.error('Não foi possível efetuar o pagamento do ingresso!');
     }
   }
 
