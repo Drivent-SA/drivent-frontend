@@ -32,6 +32,7 @@ export default function ActivitiesTable({ dateActivities }) {
           {mainActivities.map((value, index) => (
             <ActivityWrapper
               key={index}
+              id={value.id}
               title={value.title}
               startTime={value.startTime}
               endTime={value.endTime}
@@ -47,6 +48,7 @@ export default function ActivitiesTable({ dateActivities }) {
           {sideActivities.map((value, index) => (
             <ActivityWrapper
               key={index}
+              id={value.id}
               title={value.title}
               startTime={value.startTime}
               endTime={value.endTime}
@@ -62,6 +64,7 @@ export default function ActivitiesTable({ dateActivities }) {
           {workshopActivities.map((value, index) => (
             <ActivityWrapper
               key={index}
+              id={value.id}
               title={value.title}
               startTime={value.startTime}
               endTime={value.endTime}

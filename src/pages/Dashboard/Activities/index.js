@@ -1,4 +1,5 @@
 import { Typography } from '@material-ui/core';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import DateList from '../../../components/Activities';
 import ErrorMessageWrapper from '../../../components/ErrorMessageWrapper';
@@ -10,21 +11,21 @@ export default function Activities() {
   const { activities } = useActivities();
 
   function showError() {
-    if (ticket?.status !== 'PAID') {
-      return (
-        <ErrorMessageWrapper>
-          Você precisa ter confirmado pagamento antes de fazer a escolha de atividades
-        </ErrorMessageWrapper>
-      );
-    }
-    if (ticket?.TicketType?.isRemote === true) {
-      return (
-        <ErrorMessageWrapper>
-          {`Sua modalidade de ingresso não necessita escolher
-          atividade. Você terá acesso a todas as atividades.`}
-        </ErrorMessageWrapper>
-      );
-    }
+    // if (ticket?.status !== 'PAID') {
+    //   return (
+    //     <ErrorMessageWrapper>
+    //       Você precisa ter confirmado pagamento antes de fazer a escolha de atividades
+    //     </ErrorMessageWrapper>
+    //   );
+    // }
+    // if (ticket?.TicketType?.isRemote === true) {
+    //   return (
+    //     <ErrorMessageWrapper>
+    //       {`Sua modalidade de ingresso não necessita escolher
+    //       atividade. Você terá acesso a todas as atividades.`}
+    //     </ErrorMessageWrapper>
+    //   );
+    // }
     return false;
   }
 
