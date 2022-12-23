@@ -10,7 +10,8 @@ function CardComponent({ ticketId, isPaid, setIsPaid }) {
     cardNumber: '',
     name: '',
     expiry: '',
-    cvc: ''
+    cvc: '',
+    issuer: ''
   });
 
   const [isFrontOfCardVisible, setIsFrontOfCardVisible] = useState(true);
@@ -22,12 +23,13 @@ function CardComponent({ ticketId, isPaid, setIsPaid }) {
   function handleForm(e) {
     setForms({ ...forms, [e.target.name]: e.target.value });
   }
+
   const { savePayment } = useSavePayment();
   async function submitForms() {
     try {
-      if (forms.cardNumber.length === 16 && forms.name.length > 3 && forms.expiry.length === 4 && forms.cvc.length === 3) {
+      if (forms.cardNumber.length === 16 && forms.name.length > 3 && forms.expiry.length === 4 && forms.cvc.length === 3 && forms.issuer !== '' && forms.issuer !== 'unknown') {
         const cardData = {
-          issuer: '',
+          issuer: forms.issuer,
           number: forms.cardNumber,
           name: forms.name,
           expirationDate: `${forms.expiry[0]}${forms.expiry[1]}/${forms.expiry[2]}${forms.expiry[3]}`,
@@ -39,6 +41,8 @@ function CardComponent({ ticketId, isPaid, setIsPaid }) {
         toast.success('Ingresso pago com sucesso!');
 
         setIsPaid(true);
+      } else {
+        console.log('foi n');
       }
     } catch (error) {
       toast.error('Não foi possível efetuar o pagamento do ingresso!');
@@ -48,7 +52,7 @@ function CardComponent({ ticketId, isPaid, setIsPaid }) {
   return (
     <Container>
 
-      <Results data={forms} isFrontOfCardVisible={isFrontOfCardVisible} setIsFrontOfCardVisible={setIsFrontOfCardVisible}/>
+      <Results data={forms} isFrontOfCardVisible={isFrontOfCardVisible} setIsFrontOfCardVisible={setIsFrontOfCardVisible} forms={forms} setForms={setForms}/>
 
       <FormsContainer>
         <InputStyle
