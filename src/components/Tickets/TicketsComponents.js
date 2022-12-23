@@ -133,14 +133,14 @@ export default function TicketsComponent({ setTicketReserved }) {
                   {
                     ticketsInfoStatus.presential === true && ticketsInfoStatus.includesHotel === true &&
                       <>
-                        <Message>Fechado! O total ficou em R$ {ticketsInfoStatus.pricePresentialWithHotel}. Agora é só confirmar:</Message>
+                        <Message>Fechado! O total ficou em <span>R$ {ticketsInfoStatus.pricePresentialWithHotel}</span>. Agora é só confirmar:</Message>
                         <Button onClick={() => handleTicket(ticketsInfoStatus.idPresentialWithHotel)}>reservar ingresso</Button>
                       </>
                   }
                   {
                     ticketsInfoStatus.presential === true && ticketsInfoStatus.includesHotel === false &&
                     <>
-                      <Message>Fechado! O total ficou em R$ {ticketsInfoStatus.pricePresentialNoHotel}. Agora é só confirmar:</Message>
+                      <Message>Fechado! O total ficou em <span>R$ {ticketsInfoStatus.pricePresentialNoHotel}</span>. Agora é só confirmar:</Message>
                       <Button onClick={() => handleTicket(ticketsInfoStatus.idPresentialNoHotel)}>reservar ingresso</Button>
                     </>
                   }
@@ -149,7 +149,7 @@ export default function TicketsComponent({ setTicketReserved }) {
             {
               ticketsInfoStatus.isRemote === true && ticketsInfoStatus.presential === false &&
                 <>
-                  <Message>Fechado! O total ficou em R$ {ticketsInfoStatus.priceRemote}. Agora é só confirmar:</Message>
+                  <Message>Fechado! O total ficou em <span>R$ {ticketsInfoStatus.priceRemote}</span>. Agora é só confirmar:</Message>
                   <Button onClick={() => handleTicket(ticketsInfoStatus.idRemote)}>reservar ingresso</Button>
                 </>
             }
@@ -183,12 +183,12 @@ const Container = styled.div`
 
 const Message = styled.p`
   color: #8E8E8E;
+  font-family: 'Roboto', sans-serif;
 
   font-size: 20px;
-
-  font-weight: 400;
-
-  line-height: 23px;
+  span {
+    font-weight: 700;
+  }
 `;
 
 const TicketsOptions = styled.div`
@@ -197,6 +197,7 @@ const TicketsOptions = styled.div`
   gap: 24px;
 
   margin: 17px 0 35px;
+  font-family: 'Roboto', sans-serif;
 
   div {
     align-items: center;
@@ -259,6 +260,8 @@ const Button = styled.button`
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
 
   color: #000000;
+
+  font-family: 'Roboto', sans-serif;
 
   cursor: pointer;
 

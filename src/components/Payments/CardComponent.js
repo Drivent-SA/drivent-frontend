@@ -10,7 +10,8 @@ function CardComponent({ ticketId, isPaid, setIsPaid }) {
     cardNumber: '',
     name: '',
     expiry: '',
-    cvc: ''
+    cvc: '',
+    issuer: ''
   });
 
   const [isFrontOfCardVisible, setIsFrontOfCardVisible] = useState(true);
@@ -22,12 +23,13 @@ function CardComponent({ ticketId, isPaid, setIsPaid }) {
   function handleForm(e) {
     setForms({ ...forms, [e.target.name]: e.target.value });
   }
+
   const { savePayment } = useSavePayment();
   async function submitForms() {
     try {
-      if (forms.cardNumber.length === 16 && forms.name.length > 3 && forms.expiry.length === 4 && forms.cvc.length === 3) {
+      if (forms.cardNumber.length === 16 && forms.name.length > 3 && forms.expiry.length === 4 && forms.cvc.length === 3 && forms.issuer !== '' && forms.issuer !== 'unknown') {
         const cardData = {
-          issuer: 'visa',
+          issuer: forms.issuer,
           number: forms.cardNumber,
           name: forms.name,
           expirationDate: `${forms.expiry[0]}${forms.expiry[1]}/${forms.expiry[2]}${forms.expiry[3]}`,
@@ -48,16 +50,17 @@ function CardComponent({ ticketId, isPaid, setIsPaid }) {
   return (
     <Container>
 
-      <Results data={forms} isFrontOfCardVisible={isFrontOfCardVisible} setIsFrontOfCardVisible={setIsFrontOfCardVisible}/>
+      <Results data={forms} isFrontOfCardVisible={isFrontOfCardVisible} setIsFrontOfCardVisible={setIsFrontOfCardVisible} forms={forms} setForms={setForms}/>
 
       <FormsContainer>
         <InputStyle
-          type="text"
+          type="number"
           name='cardNumber'
           placeholder='Card Number'
           value={forms.cardNumber}
           onChange={handleForm}
           maxLength="16"
+          style={ (forms.cardNumber.length > 16 ? ({ border: '2px solid red' }):({}))}
         />
         <InputStyle
           type="text"
@@ -107,16 +110,16 @@ const FormsContainer = styled.form`
     width:90%;
     grid-template-columns: 1fr;
     align-items:center;
-`;
-const SubContainer= styled.div`
-    display:grid;
-    grid-template-columns: 3fr 2fr;
-    column-gap: 5%;
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
       -webkit-appearance: none;
       margin: 0;
     }
+`;
+const SubContainer= styled.div`
+    display:grid;
+    grid-template-columns: 3fr 2fr;
+    column-gap: 5%;
 `;
 const InputStyle = styled.input`
     height: 40px;

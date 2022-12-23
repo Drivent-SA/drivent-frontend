@@ -3,9 +3,14 @@ import Cards from 'react-credit-cards-2';
 import styled from 'styled-components';
 import 'react-credit-cards-2/es/styles-compiled.css';
 
-function Results({ data, isFrontOfCardVisible, setIsFrontOfCardVisible }) {
+function Results({ data, isFrontOfCardVisible, setIsFrontOfCardVisible, forms, setForms }) {
   function toggleCardFlip() {
     setIsFrontOfCardVisible(!isFrontOfCardVisible);
+  }
+  function handleCallback({ issuer }, isValid) {
+    if (isValid) {
+      setForms({ ...forms, issuer });
+    } 
   }
 
   return (
@@ -17,6 +22,7 @@ function Results({ data, isFrontOfCardVisible, setIsFrontOfCardVisible }) {
           name={data.name || ''}
           number={data.cardNumber || ''}
           focused={isFrontOfCardVisible ? 'number' : 'cvc'}
+          callback={handleCallback}
         />
       </Container>
     </>

@@ -12,7 +12,7 @@ export default function Payment() {
     if (ticket?.TicketType?.price !== undefined || ticketReserved) {
       return (<PaymentsComponent/>);
     } else {
-      return <TicketsComponent setTicketReserved={setTicketReserved} />;
+      return <TicketsComponent ticketReserved={ticketReserved} setTicketReserved={setTicketReserved} />;
     }
   }
 
