@@ -1,8 +1,8 @@
-import { useState } from 'react';
 import styled from 'styled-components';
 import useTicket from '../../hooks/api/useTicket';
 import CardComponent from './CardComponent';
 import PaymentsSucccess from './PaymentSuccess';
+import { useState } from 'react';
 
 export default function PaymentsComponent() {
   const { ticket } = useTicket();

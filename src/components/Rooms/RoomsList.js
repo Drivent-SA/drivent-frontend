@@ -12,13 +12,9 @@ export default function RoomsList({ id, name, capacity, bookingArray, selectedRo
 
   const clicked = () => {
     if (selectedRoom.id === id) {
-      if(capacity.length - bookingArray.length === 1) {
-        capacity[0] = 'filled';
-        return true;
-      }
       for (let i = capacity.length; i >= 0; i--) {
-        if (capacity[i] === 'outline' || capacity[i+1] === 'filled') {
-          capacity[i] = 'filled';
+        if (capacity[i] === 'outline') {
+          capacity[i] = '';
           return true;
         }
       }
@@ -57,10 +53,14 @@ export default function RoomsList({ id, name, capacity, bookingArray, selectedRo
                 return <BsPersonFill 
                   key={index} 
                   size="1.6em" 
-                  style={{ color: clicked() ? '#FF4791' : 'black' }} 
+                  style={{ color: 'black' }} 
                 />;
               default:
-                return <></>;
+                return <BsPersonFill 
+                  key={index} 
+                  size="1.6em" 
+                  style={{ color: '#FF4791' }} 
+                />;
               }
             })}
           </IconsBox>
