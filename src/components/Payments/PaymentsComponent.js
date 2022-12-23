@@ -2,14 +2,16 @@ import styled from 'styled-components';
 import useTicket from '../../hooks/api/useTicket';
 import CardComponent from './CardComponent';
 import PaymentsSucccess from './PaymentSuccess';
+import { useState } from 'react';
 
 export default function PaymentsComponent() {
   const { ticket } = useTicket();
   
   const hotel = ticket?.TicketType?.includesHotel ? ('Com Hotel'):('Sem Hotel');
   const remote = ticket?.TicketType?.isRemote ? ('Remoto'):('Presencial');
+  const [isPaid, setIsPaid] = useState(false);
   const price = Number(ticket?.TicketType?.price);
-
+  
   return (
 
     <>
@@ -20,7 +22,7 @@ export default function PaymentsComponent() {
         <ResumeSubitle>R$ {price}</ResumeSubitle>
       </ResumeContainer>
       <Subtitle>Pagamento</Subtitle>
-      {ticket?.status === 'PAID' ? (<PaymentsSucccess/>):(<CardComponent ticketId={ticket?.id}/>)}
+      {ticket?.status === 'PAID' ||  isPaid ? (<PaymentsSucccess/>):(<CardComponent ticketId={ticket?.id} setIsPaid={setIsPaid} isPaid={isPaid}/>)}
       
     </>
   );
