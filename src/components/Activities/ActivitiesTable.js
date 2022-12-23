@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import styled from 'styled-components';
 import ActivityWrapper from './ActivityWrapper';
 
-export default function ActivitiesTable({ dateActivities }) {
+export default function ActivitiesTable({ dateActivities, refresh, setRefresh }) {
   const activities = dateActivities.map((value) => {
     const timeDifference = dayjs(value.endTime).diff(dayjs(value.startTime), 'hour', true);
     const availableSeats = value.capacity - value.ActivityBooking?.length;
@@ -24,6 +24,8 @@ export default function ActivitiesTable({ dateActivities }) {
   const sideActivities = activities.filter((value) => value.place === 'AUDITORIO_LATERAL');
   const workshopActivities = activities.filter((value) => value.place === 'SALA_DE_WORKSHOP');
 
+  console.log(mainActivities);
+
   return (
     <Container>
       <TableWrapper>
@@ -32,11 +34,15 @@ export default function ActivitiesTable({ dateActivities }) {
           {mainActivities.map((value, index) => (
             <ActivityWrapper
               key={index}
+              id={value.id}
               title={value.title}
               startTime={value.startTime}
               endTime={value.endTime}
               duration={value.duration}
               availableSeats={value.availableSeats}
+              activityBooking={value.ActivityBooking}
+              refresh={refresh}
+              setRefresh={setRefresh}
             />
           ))}
         </PlaceTable>
@@ -47,11 +53,14 @@ export default function ActivitiesTable({ dateActivities }) {
           {sideActivities.map((value, index) => (
             <ActivityWrapper
               key={index}
+              id={value.id}
               title={value.title}
               startTime={value.startTime}
               endTime={value.endTime}
               duration={value.duration}
               availableSeats={value.availableSeats}
+              refresh={refresh}
+              setRefresh={setRefresh}
             />
           ))}
         </PlaceTable>
@@ -62,11 +71,14 @@ export default function ActivitiesTable({ dateActivities }) {
           {workshopActivities.map((value, index) => (
             <ActivityWrapper
               key={index}
+              id={value.id}
               title={value.title}
               startTime={value.startTime}
               endTime={value.endTime}
               duration={value.duration}
               availableSeats={value.availableSeats}
+              refresh={refresh}
+              setRefresh={setRefresh}
             />
           ))}
         </PlaceTable>

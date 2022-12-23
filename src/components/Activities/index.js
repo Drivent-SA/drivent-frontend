@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import ActivitiesTable from './ActivitiesTable';
 import DateSelector from './DateSelector';
 
-export default function DateList({ activities }) {
+export default function DateList({ activities, refresh, setRefresh }) {
   const [showTable, setShowTable] = useState({ date: '', isShown: false });
 
   dayjs.extend(updateLocale);
@@ -45,7 +45,7 @@ export default function DateList({ activities }) {
           />
         ))}
       </ButtonContainer>
-      {showTable.isShown && <ActivitiesTable dateActivities={dateActivities} />}
+      {showTable.isShown && <ActivitiesTable dateActivities={dateActivities} refresh={refresh} setRefresh={setRefresh} />}
     </>
   );
 }

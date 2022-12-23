@@ -1,4 +1,5 @@
 import { Typography } from '@material-ui/core';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import DateList from '../../../components/Activities';
 import ErrorMessageWrapper from '../../../components/ErrorMessageWrapper';
@@ -7,7 +8,18 @@ import useTicket from '../../../hooks/api/useTicket';
 
 export default function Activities() {
   const { ticket } = useTicket();
-  const { activities } = useActivities();
+  const { getActivities } = useActivities();
+  const [activities, setActivities] = useState(null);
+  const [refresh, setRefresh] = useState(false);
+
+  useEffect(() => {
+    async function fetchData() {
+      const data = await getActivities();
+      setActivities(data);
+    };
+
+    fetchData();
+  }, [refresh]);
 
   function showError() {
     if (ticket?.status !== 'PAID') {
@@ -32,7 +44,7 @@ export default function Activities() {
     <>
       <StyledTypography variant="h4">Escolha de atividades</StyledTypography>
       {showError()}
-      {showError() === false ? <DateList activities={activities} /> : <></>}
+      {showError() === false ? <DateList activities={activities} refresh={refresh} setRefresh={setRefresh} /> : <></>}
     </>
   );
 }

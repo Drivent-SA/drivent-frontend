@@ -1,27 +1,51 @@
 import dayjs from 'dayjs';
 import styled from 'styled-components';
-import { AiOutlineCloseCircle } from 'react-icons/ai';
+import { AiOutlineCloseCircle, AiOutlineCheckCircle } from 'react-icons/ai';
 import { BiLogIn } from 'react-icons/bi';
+import useEnrollInActivity from '../../hooks/api/useEnrollInActivity';
+import { useContext, useEffect, useState } from 'react';
+import UserContext from '../../contexts/UserContext';
 
-export default function ActivityWrapper({ title, startTime, endTime, duration, availableSeats }) {
+export default function ActivityWrapper({ id, title, startTime, endTime, duration, availableSeats, activityBooking, refresh, setRefresh }) {
+  const { postEnrollInActivity } = useEnrollInActivity(id);
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const { userData } = useContext(UserContext);
+
+  async function enrollInActivity() {
+    await postEnrollInActivity();
+    setRefresh(!refresh);
+  }
+
+  useEffect(() => {
+    const userBooking = activityBooking.filter(value => value.userId === userData.user.id);
+    if (userBooking.length > 0) return setIsSubscribed(true);
+  });
+
   return (
-    <Wrapper duration={duration}>
+    <Wrapper duration={duration} isSubscribed={isSubscribed}>
       <DetailsWrapper>
         <h6>{title}</h6>
         <span>{`${dayjs(startTime).format('HH:mm')} - ${dayjs(endTime).format('HH:mm')}`}</span>
       </DetailsWrapper>
       <AvailabilityWrapper availableSeats={availableSeats}>
-        {availableSeats > 0 ? (
-          <>
-            <BiLogIn />
-            <p>{`${availableSeats} vagas`}</p>
-          </>
-        ) : (
-          <>
-            <AiOutlineCloseCircle />
-            <p>Esgotado</p>
-          </>
-        )}
+        {availableSeats > 0 ?
+          (isSubscribed ? (
+            <>
+              <AiOutlineCheckCircle />
+              <p>Inscrito</p>
+            </>
+          ) : (
+            <>
+              <BiLogIn onClick={enrollInActivity} />
+              <p>{availableSeats === 1 ? `${availableSeats} vaga` : `${availableSeats} vagas`}</p>
+            </>
+          ))
+          : (
+            <>
+              <AiOutlineCloseCircle />
+              <p>Esgotado</p>
+            </>
+          )}
       </AvailabilityWrapper>
     </Wrapper>
   );
@@ -30,7 +54,7 @@ export default function ActivityWrapper({ title, startTime, endTime, duration, a
 const Wrapper = styled.div`
   width: 265px;
   height: ${({ duration }) => `${80 * duration + 10 * (duration - 1)}px`};
-  background: #f1f1f1;
+  background: ${props => props.isSubscribed ? '#D0FFDB' : '#f1f1f1'};
   border-radius: 5px;
   padding: 10px;
   font-family: 'Roboto';
