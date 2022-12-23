@@ -10,6 +10,7 @@ export default function Activities() {
   const { ticket } = useTicket();
   const { getActivities } = useActivities();
   const [activities, setActivities] = useState(null);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -18,7 +19,7 @@ export default function Activities() {
     };
 
     fetchData();
-  }, []);
+  }, [refresh]);
 
   function showError() {
     if (ticket?.status !== 'PAID') {
@@ -43,7 +44,7 @@ export default function Activities() {
     <>
       <StyledTypography variant="h4">Escolha de atividades</StyledTypography>
       {showError()}
-      {showError() === false ? <DateList activities={activities} /> : <></>}
+      {showError() === false ? <DateList activities={activities} refresh={refresh} setRefresh={setRefresh} /> : <></>}
     </>
   );
 }
