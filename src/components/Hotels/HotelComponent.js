@@ -32,7 +32,7 @@ export default function HotelComponent({ name, image, id, hotel, setHotel }) {
   if (roomsData) {
     roomsData.map(room => {
       totalVacancies += room.capacity;
-      bookings += room.Booking.length;
+      bookings += room?.Booking?.length;
       if (room.capacity === 1) return isSingle = true;
       if (room.capacity === 2) return isDouble = true;
       if (room.capacity >= 3) return isTriple = true;

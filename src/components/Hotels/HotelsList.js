@@ -21,9 +21,9 @@ export default function HotelsList({ hotels, trade, setTrade, refresh, setRefres
 
   const organizeCapacityArray = (room) => {
     const capacityArray = [];
-    if(room.Booking.length !== 0) {
-      const filteredBooking = room.Booking.filter( book => book.userId === userData.user.id);
-      if (filteredBooking.length !== 0) {
+    if(room?.Booking?.length !== 0) {
+      const filteredBooking = room.Booking?.filter( book => book.userId === userData.user.id);
+      if (filteredBooking?.length !== 0) {
         for (let i = 0; i < room.capacity; i++) {
           capacityArray.push('full');
         }
