@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import UserContext from '../../contexts/UserContext';
 import useSaveBooking from '../../hooks/api/useSaveBooking';
@@ -46,17 +47,23 @@ export default function HotelsList({ hotels, trade, setTrade, refresh, setRefres
   };
 
   const sendSaveBooking = async() => {
-    if (trade.isTrading) {
-      await updateBooking();
-      setTrade({
-        id: undefined,
-        isTrading: false,
-        loading: true,
-      });
-      setRefresh(!refresh);
-    } else {
-      await saveBooking();
-      setRefresh(!refresh);
+    try {
+      if (trade.isTrading) {
+        await updateBooking();
+        setTrade({
+          id: undefined,
+          isTrading: false,
+          loading: true,
+        });
+        setRefresh(!refresh);
+        toast('Reserva atualizada com sucesso!');
+      } else {
+        await saveBooking();
+        setRefresh(!refresh);
+        toast('Quarto reservado com sucesso!');
+      }
+    } catch (error) {
+      toast('Não foi possível reservar o quarto!');
     }
   };
 

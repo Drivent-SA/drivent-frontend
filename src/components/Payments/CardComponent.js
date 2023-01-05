@@ -38,12 +38,12 @@ function CardComponent({ ticketId, isPaid, setIsPaid }) {
 
         await savePayment({ ticketId, cardData });
 
-        toast.success('Ingresso pago com sucesso!');
+        toast('Ingresso pago com sucesso!');
 
         setIsPaid(true);
       }
     } catch (error) {
-      toast.error('Não foi possível efetuar o pagamento do ingresso!');
+      toast('Não foi possível efetuar o pagamento do ingresso!');
     }
   }
 
