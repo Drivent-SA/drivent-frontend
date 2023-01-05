@@ -13,6 +13,8 @@ import EventInfoContext from '../../contexts/EventInfoContext';
 import UserContext from '../../contexts/UserContext';
 
 import useSignIn from '../../hooks/api/useSignIn';
+import { GithubLoginButton } from 'react-social-login-buttons';
+import { UserAuth } from '../../contexts/AuthContext';
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
@@ -22,6 +24,7 @@ export default function SignIn() {
 
   const { eventInfo } = useContext(EventInfoContext);
   const { setUserData } = useContext(UserContext);
+  const { oAuthSignIn } = UserAuth();
 
   const navigate = useNavigate();
   
@@ -38,6 +41,10 @@ export default function SignIn() {
     }
   } 
 
+  const handleSignInByOauth = async() => {
+    await oAuthSignIn();
+    navigate('/dashboard');
+  };
   return (
     <AuthLayout background={eventInfo.backgroundImageUrl}>
       <Row>
@@ -54,6 +61,11 @@ export default function SignIn() {
       </Row>
       <Row>
         <Link to="/enroll">Não possui login? Inscreva-se</Link>
+      </Row>
+      <Row>
+        <GithubLoginButton onClick={handleSignInByOauth}>
+          <spam>Entre pelo GitHub</spam>
+        </GithubLoginButton>
       </Row>
     </AuthLayout>
   );
