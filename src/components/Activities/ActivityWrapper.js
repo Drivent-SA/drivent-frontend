@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import styled from 'styled-components';
+import { toast } from 'react-toastify';
 import { AiOutlineCloseCircle, AiOutlineCheckCircle } from 'react-icons/ai';
 import { BiLogIn } from 'react-icons/bi';
 import useEnrollInActivity from '../../hooks/api/useEnrollInActivity';
@@ -11,8 +12,13 @@ export default function ActivityWrapper({ id, title, startTime, endTime, duratio
   const { userData } = useContext(UserContext);
 
   async function enrollInActivity() {
-    await postEnrollInActivity();
-    setRefresh(!refresh);
+    try {
+      await postEnrollInActivity();
+      setRefresh(!refresh);
+      toast('Inscrição na atividade realizada com sucesso!');
+    } catch (error) {
+      toast('Não foi possível realizar a inscrição na atividade!');
+    }
   }
 
   let isSubscribed = false;
